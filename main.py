@@ -1,7 +1,11 @@
 import itertools
 
 from qiskit.quantum_info import SparsePauliOp
-
+from qiskit_aer import Aer
+from qiskit_algorithms.minimum_eigensolvers import VQE
+from qiskit_algorithms.optimizers import COBYLA
+from qiskit.circuit.library import TwoLocal
+from qiskit_aer.primitives import EstimatorV2
 def build_lattice(nx: int, ny: int, nz: int):
     # will add a type param later, so that it can build FCC/BCC/etc.
     coords = []
@@ -129,7 +133,7 @@ def qubo_to_pauli(linear, quadratic, constant, num_qubits):
 
         # - 1/4 Z_j
         lab_j = ['I'] * num_qubits
-        lab_i[num_qubits - 1 - j] = 'Z'
+        lab_j[num_qubits - 1 - j] = 'Z'
         add_pauli(''.join(lab_j), -0.25 * c)
 
         # + 1/4 Z_i Z_j
@@ -144,3 +148,39 @@ def qubo_to_pauli(linear, quadratic, constant, num_qubits):
     op = SparsePauliOp.from_list(list(zip(labels, coeffs)))
 
     return op, constant
+
+# QAOAOAOAOAOAO
+if __name__ == "__main__":
+    nx, ny, nz = 2, 2, 1
+    coords = build_lattice(nx,ny,nz)
+    adjlist = build_adj_list(coords)
+    S = len(coords)
+
+    seqH = [True, False, True]
+    R = len(seqH)
+
+    mapping = map_idx_to_qubit(R,S)
+    A, B, C = 5.0, 5.0, 5.0
+
+    linear, quadratic, constant = build_qubo(R, S, mapping, adjlist, seqH, A, B, C)
+    num_qubits = R * S
+
+    pauli_op, const = qubo_to_pauli(linear, quadratic, constant, num_qubits)
+    
+    est = EstimatorV2()
+    
+    ansatz = TwoLocal(
+        num_qubits, 
+        ['ry', 'rz'], 'cz', 
+        reps=2
+    ).decompose().decompose()
+
+    vqe = VQE(
+        ansatz=ansatz, 
+        optimizer=COBYLA(), 
+        estimator=est
+    )
+    res = vqe.compute_minimum_eigenvalue(
+        operator=pauli_op
+    )
+    print(res)
