@@ -1,5 +1,7 @@
 import itertools
 
+from qiskit.quantum_info import SparsePauliOp
+
 def build_lattice(nx: int, ny: int, nz: int):
     # will add a type param later, so that it can build FCC/BCC/etc.
     coords = []
@@ -101,3 +103,44 @@ def build_qubo(R, S, mapping, adjlist, seqH, A = 10.0, B = 10.0, C = 10.0):
 
     return linear, quadrs, constant
 
+def qubo_to_pauli(linear, quadratic, constant, num_qubits):
+    pauli_map = {}
+
+    def add_pauli(pauli_label, coeff):
+        pauli_map[pauli_label] = pauli_map.get(pauli_label, 0.0) + coeff
+
+    for (i, ), c in linear.items():
+        # Global Term
+        add_pauli('I' * num_qubits, c * 0.5) 
+
+        # Z-Term
+        label = ['I'] * num_qubits
+        label[num_qubits - 1 - i] = 'Z'
+        add_pauli(''.join(label), -0.5 * c)
+
+    for (i, j), c in quadratic.items():
+        # Global Term
+        add_pauli('I'* num_qubits, 0.25 * c)
+
+        # - 1/4 Z_i
+        lab_i = ['I'] * num_qubits
+        lab_i[num_qubits - 1 - i] = 'Z'
+        add_pauli(''.join(lab_i), -0.25 * c)
+
+        # - 1/4 Z_j
+        lab_j = ['I'] * num_qubits
+        lab_i[num_qubits - 1 - j] = 'Z'
+        add_pauli(''.join(lab_j), -0.25 * c)
+
+        # + 1/4 Z_i Z_j
+        lab_ij = ['I'] * num_qubits
+        lab_ij[num_qubits - 1 - i] = 'Z'
+        lab_ij[num_qubits - 1 - j] = 'Z'
+        add_pauli(''.join(lab_ij), 0.25 * c)
+
+    pauli_list = [(k, v) for k, v in pauli_map.items() if abs(v) > 1e-12]
+    labels = [p for p, _ in pauli_list]
+    coeffs = [v for _, v in pauli_list]
+    op = SparsePauliOp.from_list(list(zip(labels, coeffs)))
+
+    return op, constant
