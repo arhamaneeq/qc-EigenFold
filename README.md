@@ -3,7 +3,19 @@
 
 # EigenFold
 
-VQE Used to Model Protein Folding
+## The Plan (for now)
+
+### Minimal Prototype
+
+- Simple Cubic Lattice
+- Using the HP Model (Hydrophobic-polar protein folding model)[ \[ wiki \] ](https://en.wikipedia.org/wiki/Hydrophobic-polar_protein_folding_model)
+- QUBOize to ready for VQE
+- VQE
+
+### Unminimal Prototype
+- Replace HP Model with Miyazawa-Jernigan
+- Turn encoding
+- Better mixers
 
 ## References
 - *Variational Quantum Eigensolver for Protein Folding using Neutral Atom Platforms*, Gefen Barnes, 2024
