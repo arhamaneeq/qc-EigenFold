@@ -1,9 +1,42 @@
 > [!NOTE]
 > This repository was built as a submission for the *IISC Quantum Fall Fest 2025 | Cleveland Clinic QFF Hackathon Prompt*
 
+> [!IMPORTANT]
+> This README.md contains MathJax. Best viewed on GitHub on a Desktop Browser
+
 # EigenFold
 
 ## The Plan (for now)
+
+### QUBO
+
+We use QUBO, i.e., for variables $b_i \in \{0, 1\}$ we have
+
+$$
+E(b_1, b_2, ..., b_N) = \sum_i a_i b_i + \sum_{i \lt j} b_i Q_{ij} b_j + c
+$$
+
+#### One-Hot Encoding in QUBO
+
+We can't have hard constraints in QUBO, but we can penalties if the constraint is violated. Suppose we have a one-hot encoded variable, then
+
+$$
+\sum_p b_{r,p} - 1 =0
+$$
+
+which we can turn into a squared penalty
+
+$$
+A \times \Big(\sum_p b_{r,p} - 1\Big)^2
+$$
+
+where $A$ is a large penalty. Now, keeping in mind that $b^2_{r,p} = b_{r, p}$, since $b \in \{0, 1\}$, we can express the penalty as a sum of a linear, quadratic, and constant term.
+
+$$
+A \times \Big(\sum_p b_{r,p} - 1\Big)^2 = A \times \Big( -\sum_p b_{r,p} + 2 \sum_{p \lt q} b_{r,p}b_{r, q} + 1\Big)
+$$
+
+The $2A\sum_{p\lt q} b_{r,p}b_{r,q}$ term discourages residue duplication, i.e., no residue can occupy multiple sites at once, while the $-A\sum_p b_{r,p}$ term prevents residue disappearance, i.e., each residue must appear at least once.
 
 ### Minimal Prototype
 
