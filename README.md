@@ -40,6 +40,27 @@ The $2A\sum_{p\lt q} b_{r,p}b_{r,q}$ term discourages residue duplication, i.e.,
 
 We must also encode the fact that sequential residues must be placed next to each other in the lattice, i.e., enforce a rule backbone adjacency rule. This is achieved by the term $-C\sum_p \sum_{q\in N(p)} b_{r, p} b_{r+1, q}$.
 
+#### Mapping QUBO Terms to Pauli Words
+
+The QUBO energy function, where $c$ is a constant offset, $a_i$ is the linear coefficient for $b_i$, and $Q_{ij}$ is the quadratic coupling betweens bits $i$ and $j$, is of the form 
+
+$$
+E(\bold{b}) = c + \sum_i a_i b_i + \sum_{i \lt j} Q_{ij} b_i b_j
+$$
+
+Each binary variable $b_i$ is replaced by a qubit operator through the mapping $b_i \mapsto \frac{1- Z_i}{2}$
+
+
+
+The terms can thus be transformed into pauli words via
+
+$$
+a_i b_i \mapsto \frac{a_i}{2}I - \frac{a_i}{2}Z_i
+$$
+
+$$
+Q_{ij} b_i b_j \mapsto \frac{Q_{ij}}{4}(I - Z_i - Z_j + Z_i Z_j)
+$$
 ### Minimal Prototype
 
 - Simple Cubic Lattice
