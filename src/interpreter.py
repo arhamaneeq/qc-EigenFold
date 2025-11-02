@@ -24,7 +24,7 @@ def classical_ground_state(linear, quadratic):
 
     return np.array(best_bits), best_E
 
-def visualize_folds(decoded_confs, seqH, name_prefix):
+def visualize_folds(decoded_confs, seqH, amines, lat):
     n = len(decoded_confs)
     ncols = min(n, 3)
     nrows = (n + ncols - 1) // ncols
@@ -45,8 +45,8 @@ def visualize_folds(decoded_confs, seqH, name_prefix):
         ax.set_title(f"{bitstring}\np={prob:.3f}")
         ax.set_box_aspect([1,1,1])
 
-    plt.suptitle(f"Top {n} Stable Conformations for {name_prefix}", fontsize=14)
+    plt.suptitle(f"Top {n} Stable Conformations for {amines} / {lat}", fontsize=14)
     plt.tight_layout()
-    plt.savefig(f"images/{name_prefix}.png", dpi=300)
+    plt.savefig(f"images/{lat}_{amines}.png", dpi=300)
     # plt.show()
 
