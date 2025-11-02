@@ -6,7 +6,19 @@ from src.qve import Estimate
 
 if __name__ == "__main__":
     lattices = ["fcc", "bcc", "sc"]
-    peptides = ["ABC", "XYZ", "VAR", "ARH", "EVA", "RON", "FEY"]
+
+    peptides = [
+    # 16 dipeptides
+    "AV", "RF", "DG", "HQ", "MN", "CT", "YW", "KE",
+    "IL", "PS", "FA", "RE", "GN", "VK", "DY", "WL",
+
+    # 16 tripeptides
+    "AVF", "RDE", "HQL", "MNG", "CTY", "YWA", "KEP", "ILR",
+    "PSV", "FAR", "REG", "GNK", "VLD", "DYH", "WLC", "TMA",
+
+    # 3 tetrapeptides
+    "AVFY", "RDEG", "MNGH"
+]
 
     results = []
 

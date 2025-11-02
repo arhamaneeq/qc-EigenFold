@@ -1,6 +1,9 @@
 import numpy as np
 import itertools
+import matplotlib
+matplotlib.use("Agg")
 import matplotlib.pyplot as plt
+plt.ioff()
 from mpl_toolkits.mplot3d import Axes3D
 
 def classical_ground_state(linear, quadratic):
@@ -48,5 +51,6 @@ def visualize_folds(decoded_confs, seqH, amines, lat):
     plt.suptitle(f"Top {n} Stable Conformations for {amines} / {lat}", fontsize=14)
     plt.tight_layout()
     plt.savefig(f"images/{lat}_{amines}.png", dpi=300)
+    plt.close()
     # plt.show()
 
