@@ -3,3 +3,5 @@ JOURNAL
 src/__pycache__/*
 images/*.png
 images/*.jpg
+data/parsed/*
+data/*.csv

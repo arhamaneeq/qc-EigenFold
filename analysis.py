@@ -7,8 +7,8 @@ from pathlib import Path
 
 
 # ========== CONFIGURATION ==========
-DATA_PATH = Path("eigenfold_summary.csv")
-OUTPUT_DIR = Path("analysis_outputs")
+DATA_PATH = Path("data/eigenfold_summary.csv")
+OUTPUT_DIR = Path("data/parsed")
 OUTPUT_DIR.mkdir(exist_ok=True)
 sns.set(style="whitegrid", context="paper", palette="muted")
 

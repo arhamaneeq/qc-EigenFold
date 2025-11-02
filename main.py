@@ -31,5 +31,5 @@ if __name__ == "__main__":
                 print(f"Failed for {peptide} on {lattice}: {e}")
     
     df = pd.DataFrame(results)
-    df.to_csv("eigenfold_summary.csv")
+    df.to_csv("data/eigenfold_summary.csv")
 
