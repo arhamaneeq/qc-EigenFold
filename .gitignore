@@ -1,3 +1,5 @@
 .venv/*
 JOURNAL
 src/__pycache__/*
+images/*.png
+images/*.jpg

@@ -62,3 +62,23 @@ def choose_lattice_dims(R: int, ratio: float = 1.0):
     nx = ny = int(math.floor(math.sqrt(S_target)))
     nz = math.ceil(S_target / (nx * ny))
     return nx, ny, nz
+
+def decode_positions(bits, mapping, S):
+    positions = []
+    for r, qubits in mapping.items():
+        val = sum(bits[q] * (2 ** i) for i, q in enumerate(qubits))
+        val %= S
+        positions.append(val)
+    return positions
+
+def positions_to_coords(positions, coords):
+    return [coords[p] for p in positions]
+
+def decode_bitstring(bitstring, mapping, coords):
+    bits = list(map(int, bitstring[::-1]))  # reverse for little-endian
+    positions = []
+    for r, qubits in mapping.items():
+        val = sum(bits[q] * (2 ** i) for i, q in enumerate(qubits))
+        val %= len(coords)
+        positions.append(coords[val])
+    return positions

@@ -11,5 +11,4 @@ if __name__ == "__main__":
         else: 
             continue
 
-    seqH = [is_hydrophobic(acid) for acid in list(poly.upper())]
-    Estimate(seqH=seqH)
+    Estimate(amino_seq=poly)

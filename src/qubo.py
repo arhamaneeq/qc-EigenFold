@@ -4,7 +4,7 @@ import math
 
 from qiskit.quantum_info import SparsePauliOp
 
-def build_qubo(R, S, mapping, adjlist, seqH, A = 10.0, B = 10.0, C = 10.0):
+def build_qubo(R, S, mapping, adjlist, seqH, A = 10.0, B = 10.0, C = 10.0, D = 1.0):
     linear = defaultdict(float)
     quadrs = defaultdict(float)
     const_ = 0.0
@@ -37,14 +37,12 @@ def build_qubo(R, S, mapping, adjlist, seqH, A = 10.0, B = 10.0, C = 10.0):
         const_ += coeff
 
     def add_self_collision_penalty(r1, r2, coeff):
-        w1, b1 = site_value(r1)
-        w2, b2 = site_value(r2)
-
-        for i, wi in enumerate(w1):
-            for j, wj in enumerate(w2):
-                add_linear(b1[i], coeff * wi ** 2)
-                add_linear(b2[j], coeff * wj ** 2)
-                add_quadratic(b1[i], b2[j], -2 * coeff * wi * wj)
+        b1 = mapping[r1]
+        b2 = mapping[r2]
+        for q1, q2 in zip(b1, b2):
+            add_linear(q1, -coeff)
+            add_linear(q2, -coeff)
+            add_quadratic(q1, q2, 2 * coeff)
 
     def add_contact_reward(r1, r2, coeff):
         nonlocal const_
@@ -52,16 +50,27 @@ def build_qubo(R, S, mapping, adjlist, seqH, A = 10.0, B = 10.0, C = 10.0):
         const_ += coeff
 
     for r in range(R - 1):
-        add_adj_penalty(r, r + 1, C)
+        add_adj_penalty(r, r + 1, -C)
     
     for i in range(R):
         for j in range(i + 1, R):
             add_self_collision_penalty(i, j, B)
 
+            b1, b2 = mapping[i], mapping[j]
+            for q1 in b1:
+                for q2 in b2:
+                    add_quadratic(q1, q2, B / 10)
+
     for i in range(R):
         for j in range(i + 1, R):
             if seqH[i] and seqH[j]:
                 add_contact_reward(i, j, A)
+            
+
+    D = 1.0
+    for r in range(R):
+        for q in mapping[r]:
+            add_linear(q, -D)
 
     return linear, quadrs, const_
 
