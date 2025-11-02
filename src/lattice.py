@@ -48,21 +48,17 @@ def build_adj_list(coords):
     return adj
 
 def map_idx_to_qubit(R, S):
-    # so R is the residue number, i.e., the Rth (0-indexed) amino acid in the chain
-    # row-maj flattening from (r,p) -> idx
-    # grouped by residue
-    
-    mapping = {}
 
-    for r in range(R):
-        for p in range(S):
-            mapping[(r, p)] = r * S + p
+    num_bits = math.ceil(math.log2(S))
+    mapping = {
+        r: [r * num_bits + k for k in range(num_bits)] 
+        for r in range(R)
+    }
 
-    return mapping
+    return mapping, num_bits
 
-def choose_lattice_dims(R, ratio=1.3):
-    # Target number of sites slightly above R
+def choose_lattice_dims(R: int, ratio: float = 1.0):
     S_target = int(math.ceil(R * ratio))
-    side = math.ceil(S_target ** (1/3))
-    nx = ny = nz = side
+    nx = ny = int(math.floor(math.sqrt(S_target)))
+    nz = math.ceil(S_target / (nx * ny))
     return nx, ny, nz

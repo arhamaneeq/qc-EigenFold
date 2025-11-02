@@ -15,12 +15,12 @@ def Estimate(seqH):
     adjlist = build_adj_list(coords)
     S = len(coords)
 
-    mapping = map_idx_to_qubit(R,S)
+    mapping, num_bits = map_idx_to_qubit(R,S)
+    num_qubits = R * num_bits
     A, B, C = 5.0, 5.0, 5.0
 
     linear, quadratic, constant = build_qubo(R, S, mapping, adjlist, seqH, A, B, C)
-    num_qubits = R * S
-    print(f"R:{R} | S:{S} | R * S : {num_qubits}")
+    print(f"R:{R} | S:{S} | N_q: {num_qubits}\nQubit Density: {R * S / num_bits}")
 
     pauli_op, const = qubo_to_pauli(linear, quadratic, constant, num_qubits)
     
