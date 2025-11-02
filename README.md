@@ -1,5 +1,5 @@
 > [!NOTE]
-> This repository was built as a submission for the *IISC Quantum Fall Fest 2025 | Cleveland Clinic QFF Hackathon Prompt*
+> This repository was built as a submission for the *IISC Quantum Fall Fest 2025 | Cleveland Clinic QFF Hackathon Prompt*. If you're a judge, the most-recent commit before the deadline is 0f644620b6422b11b43194e48a167743c714cd1c. I will have continued to refine the project since then on the repo.
 
 > [!IMPORTANT]
 > This README.md contains MathJax. Best viewed on GitHub on a Desktop Browser
@@ -18,9 +18,15 @@ You can then run the whole pipeline
 python main.py
 python analysis.py # once main.py finishes running
 ```
-    
-# EigenFold
 
+# EigenFold
+A hybrid quantum–classical framework for simulating lattice-based protein folding using QUBO formulation and Variational Quantum Eigensolvers (VQE).
+
+## Introduction
+
+Protein folding is a complex optimization problem where a sequence of amino acids must find its lowest-energy 3D structure. Classical algorithms such as Monte Carlo or molecular dynamics require large computational resources and often get trapped in local minima. Quantum computing offers a new approach by representing the folding landscape as a quantum energy function that can be explored more efficiently.
+
+EigenFold reformulates the lattice-based Hydrophobic–Polar (HP) folding model as a Quadratic Unconstrained Binary Optimization (QUBO) problem and solves it using the Variational Quantum Eigensolver (VQE). The workflow maps residues to binary variables, encodes physical rules like adjacency and self-avoidance as QUBO terms, converts the model into a Pauli Hamiltonian, and minimizes it using VQE. The resulting quantum state provides a probability distribution over possible folds, allowing multiple stable conformations to be visualized and compared across lattice geometries.
 
 ## QUBO
 
@@ -93,7 +99,8 @@ $$
 p_r = \sum_i w_i x_i
 $$
 
-where, $x_{r,k} \in \{0,1\}$.
+where, $x_{r,k} \in \{0,1\}$. This encoding reduces qubit requirements from 
+$𝑂(𝑅𝑆)$ to $𝑂(𝑅 \log ⁡𝑆)$, enabling simulations of larger systems within tractable resource limits.
 
 Since $E = E_{backbone} + E_{collision} + E_{contact} + E_{const}$, we have
 
@@ -121,6 +128,41 @@ $$
 > For `R = 3` and `S = 12`, we have `num_qubits = 12`, an improvement by a factor of 9, and takes 29.68s to execute.
 
 The mapping to pauli words remains relatively unchanged.
+
+## Results
+
+### Analysis
+
+Each simulation run stores:
+
+- Lattice type (fcc, bcc, sc)
+- Peptide sequence
+- Number of residues, R
+- Number of stable conformations
+- Entropy of the conformation probability distribution
+- Dominant fold probability and energy
+- Runtime statistics
+- Plots are generated automatically via analysis.py:
+- Energy–Entropy relationships
+- Entropy vs lattice topology
+- Runtime scaling with R
+- Number of stable conformations per lattice type
+- Correlation matrix across all computed metrics
+- These metrics quantify the folding landscape, energy degeneracy, and computational cost.
+
+### Discussion
+
+EigenFold reproduces realistic folding dynamics within a simplified lattice model.
+Longer peptides and denser lattices (e.g., fcc) exhibit:
+- Higher entropy and greater conformational diversity
+- Multiple stable low-energy states
+- Higher runtime due to complex interaction graphs
+- Simpler lattices (e.g., sc) show deterministic folding with single dominant minima.
+- Energy–entropy correlations reflect natural folding trade-offs: increasing configurational freedom flattens the energy landscape but increases degeneracy.
+
+### Conclusion
+EigenFold demonstrates a fully functional quantum-inspired folding pipeline that scales efficiently using binary encoding. The QUBO formulation captures core physical constraints — backbone connectivity, steric exclusion, and hydrophobic attraction — within a quantum-compatible optimization model. Results confirm that lattice geometry strongly governs folding entropy and computational cost, and that VQE can reliably identify dominant conformations even in small peptide systems.
+This work provides a concrete foundation for scaling quantum approaches to biologically relevant folding problems.
 
 ## References
 - *Variational Quantum Eigensolver for Protein Folding using Neutral Atom Platforms*, Gefen Barnes, 2024
