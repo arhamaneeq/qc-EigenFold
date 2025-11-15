@@ -1,5 +1,5 @@
 > [!NOTE]
-> This repository was built as a submission for the *IISC Quantum Fall Fest 2025 | Cleveland Clinic QFF Hackathon Prompt*. If you're a judge, the most-recent commit before the deadline is 0f644620b6422b11b43194e48a167743c714cd1c. I will have continued to refine the project since then on the repo.
+> This repository was built as a submission for, and the *winner* of the *IISC Quantum Fall Fest 2025 | IBM ⨯ Cleveland Clinic QFF Hackathon Prompt*. The most-recent commit before the deadline is `0f64462`.
 
 > [!IMPORTANT]
 > This README.md contains MathJax. Best viewed on GitHub on a Desktop Browser
