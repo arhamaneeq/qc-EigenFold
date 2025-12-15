@@ -2,7 +2,7 @@
 > This repository was built as a submission for, and the *winner* of the *IISC Quantum Fall Fest 2025 | IBM ⨯ Cleveland Clinic QFF Hackathon Prompt*. The most-recent commit before the deadline is `0f64462`.
 
 > [!IMPORTANT]
-> This README.md contains MathJax. Best viewed on GitHub on a Desktop Browser
+> This README.md contains MathJax. Best viewed on GitHub on a Desktop Browser. A PDF containing more details can be found at [`./eigenFold.pdf`](./eigenFold.pdf).
 
 ## Setting up The Repository
 After cloning, make sure you're using `Python 3.11.6`. 
